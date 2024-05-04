@@ -11,17 +11,21 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState("");
-  const handleTheChange = () => {
-    if (mode === "dark") {
-      setMode("light");
-      document.documentElement.classList.add("light");
+  const handleThemeChange = () => {
+    if(
+      localStorage.theme === 'dark' || 
+      (!("theme" in localStorage) && 
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      setMode('dark');
+      document.documentElement.classList.add('dark');
     } else {
-      setMode("dark");
-      document.documentElement.classList.add("dark");
+      setMode('light');
+      document.documentElement.classList.remove('dark');
     }
-  };
+  }
   useEffect(() => {
-    handleTheChange();
+    handleThemeChange();
   }, [mode]);
 
   return (
